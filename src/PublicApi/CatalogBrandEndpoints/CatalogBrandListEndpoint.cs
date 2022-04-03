@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints;
+using Microsoft.Extensions.Logging;
 using MinimalApi.Endpoint;
 
 namespace Microsoft.eShopWeb.PublicApi.CatalogBrandEndpoints;
@@ -17,10 +20,13 @@ public class CatalogBrandListEndpoint : IEndpoint<IResult>
 {
     private IRepository<CatalogBrand> _catalogBrandRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger<CatalogBrandListEndpoint> _logger;
 
-    public CatalogBrandListEndpoint(IMapper mapper)
+
+    public CatalogBrandListEndpoint(IMapper mapper, ILogger<CatalogBrandListEndpoint> logger)
     {
         _mapper = mapper;
+        _logger = logger;
     }
 
     public void AddRoute(IEndpointRouteBuilder app)
@@ -37,6 +43,16 @@ public class CatalogBrandListEndpoint : IEndpoint<IResult>
 
     public async Task<IResult> HandleAsync()
     {
+        try
+        {
+            throw new Exception("Cannot move further");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
+
         var response = new ListCatalogBrandsResponse();
 
         var items = await _catalogBrandRepository.ListAsync();
