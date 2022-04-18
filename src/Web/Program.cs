@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.eShopWeb;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using Microsoft.eShopWeb.ApplicationCore.Options;
 using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Web;
@@ -93,6 +94,8 @@ builder.Services.AddScoped<HttpService>();
 builder.Services.AddBlazorServices();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.Configure<OrderItemReserverOptions>(builder.Configuration);
 
 var app = builder.Build();
 

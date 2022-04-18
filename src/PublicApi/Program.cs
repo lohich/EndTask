@@ -182,15 +182,6 @@ using (var scope = app.Services.CreateScope())
 
 app.MapEndpoints();
 app.Logger.LogInformation("LAUNCHING PublicApi");
-try
-{
-    throw new Exception("Cannot move further");
-}
-catch (Exception e)
-{
-    app.Logger.LogError(e, e.Message);
-    throw;
-}
 app.Run();
 
 public partial class Program { }

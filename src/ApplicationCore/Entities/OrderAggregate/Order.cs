@@ -7,7 +7,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
 public class Order : BaseEntity, IAggregateRoot
 {
-    private Order()
+    public Order()
     {
         // required by EF
     }
