@@ -9,6 +9,7 @@ public class AppIdentityDbContext : IdentityDbContext<ApplicationUser>
     public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
         : base(options)
     {
+        Database.SetCommandTimeout(300);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
