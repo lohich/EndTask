@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
+using Azure.Messaging.ServiceBus;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
@@ -55,8 +58,11 @@ public class OrderService : IOrderService
 
         var order = new Order(basket.BuyerId, shippingAddress, items);
 
-        using var httpClient = new HttpClient();
-        var res = await httpClient.PostAsJsonAsync(_options.OrderItemReserverUrl, order);
+        await using var client = new ServiceBusClient(_options.OrderItemReserverQueueUrl);
+        var sender = client.CreateSender(_options.OrderItemReserverQueueName);
+        var message = new ServiceBusMessage(JsonSerializer.Serialize(order));
+
+        await sender.SendMessageAsync(message);
 
         await _orderRepository.AddAsync(order);
     }

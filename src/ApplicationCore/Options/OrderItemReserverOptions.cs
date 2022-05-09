@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace Microsoft.eShopWeb.ApplicationCore.Options;
 public class OrderItemReserverOptions
 {
-    public string OrderItemReserverUrl { get; set; }
+    public string OrderItemReserverQueueUrl { get; set; }
+    public string OrderItemReserverQueueName { get; set; }
 }

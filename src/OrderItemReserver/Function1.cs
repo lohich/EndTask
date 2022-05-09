@@ -18,26 +18,21 @@ namespace OrderItemReserver
     public static class Function1
     {
         [FunctionName("Function1")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ExecutionContext context)
+        public static async Task Run(
+            [ServiceBusTrigger("cloudxqueue", Connection = "ServiceBusConnection")] string req, ExecutionContext context)
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var order = JsonConvert.DeserializeObject<Order>(requestBody);
-
             var serviceClient = new BlobServiceClient(config.GetValue<string>("ConnectionString"));
 
             var containerClient = serviceClient.GetBlobContainerClient(config.GetValue<string>("ContainerName"));
 
-            var blobClient = containerClient.GetBlobClient($"Order {order.Id}.json");
+            var blobClient = containerClient.GetBlobClient($"Order {Guid.NewGuid()}.json");
 
-            await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes(requestBody)));
-
-            return new OkResult();
+            await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes(req)));
         }
     }
 }
