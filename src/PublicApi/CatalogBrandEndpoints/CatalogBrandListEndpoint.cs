@@ -43,16 +43,6 @@ public class CatalogBrandListEndpoint : IEndpoint<IResult>
 
     public async Task<IResult> HandleAsync()
     {
-        try
-        {
-            throw new Exception("Cannot move further");
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, e.Message);
-            throw;
-        }
-
         var response = new ListCatalogBrandsResponse();
 
         var items = await _catalogBrandRepository.ListAsync();

@@ -10,7 +10,7 @@ public class CatalogContext : DbContext
 {
     public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
     {
-        Database.SetCommandTimeout(300);
+        //Database.SetCommandTimeout(300);
     }
 
     public DbSet<Basket> Baskets { get; set; }
