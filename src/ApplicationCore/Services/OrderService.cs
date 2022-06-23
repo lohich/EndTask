@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using Azure.Messaging.ServiceBus;
@@ -63,6 +62,9 @@ public class OrderService : IOrderService
         var message = new ServiceBusMessage(JsonSerializer.Serialize(order));
 
         await sender.SendMessageAsync(message);
+
+        using var httpClient = new HttpClient();
+        var res = await httpClient.PostAsJsonAsync(_options.DeliveryOrderProcessorUrl, order);
 
         await _orderRepository.AddAsync(order);
     }
